@@ -9,6 +9,7 @@ public class Cell {
     private TiledMapTileLayer.Cell tiledCell;
     private boolean blocked;
     private boolean win;
+    private boolean challenge;
 
     public Cell(int column, int row, TiledMapTileLayer.Cell tiledCell) {
         this.column = column;
@@ -16,6 +17,7 @@ public class Cell {
         this.tiledCell = tiledCell;
         this.blocked = checkBlockedProperty();
         this.win = checkWinProperty();
+        this.challenge = checkChallengeProperty();
     }
 
     public int getColumn() {
@@ -32,6 +34,10 @@ public class Cell {
 
     public boolean isWin(){
         return win;
+    }
+
+    public boolean isChallengeCell(){
+        return challenge;
     }
 
     public TiledMapTileLayer.Cell getTiledCell() {
@@ -53,6 +59,13 @@ public class Cell {
     private boolean checkWinProperty() {
         if (tiledCell != null && tiledCell.getTile() != null) {
             return tiledCell.getTile().getProperties().containsKey("win");
+        }
+        return false;
+    }
+
+    private boolean checkChallengeProperty() {
+        if (tiledCell != null && tiledCell.getTile() != null) {
+            return tiledCell.getTile().getProperties().containsKey("challenge");
         }
         return false;
     }

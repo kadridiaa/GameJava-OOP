@@ -1,12 +1,14 @@
 package com.badlogic.maserunner.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -18,11 +20,15 @@ import com.badlogic.maserunner.model.Maze;
 import com.badlogic.maserunner.model.Player;
 import com.badlogic.maserunner.model.Wall;
 import com.badlogic.maserunner.model.WinCells;
+import com.badlogic.maserunner.model.ChallengePopup;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
+import javax.swing.JFrame;
 
 
 public class MazeView implements Screen {
@@ -34,32 +40,33 @@ public class MazeView implements Screen {
     private PlayerInputProcessor inputProcessor;
     private Wall wall;
     private GameController gameController;
-    private BitmapFont font;
-    private Stage stage;
-    private TextButton replayButton;
-    private boolean hasWon = false; // Pour savoir si le joueur a gagné
     private Main game;
     private ChallengeCells challengeCells;
-    private boolean challengeActive = false; // État du défi actif
-    private Dialog mathChallengeDialog;
+    private static final int STARTX = 1 ;
+    private static final int STARTY = 32 ;
+    private static final int cellSize = 16 ;
+    private JFrame frame;
+    private Stage stage;
 
 
 
 
 
     // Constructeur de MazeView qui prend un modèle de labyrinthe
-    public MazeView(Maze maze , Main game) {
+    public MazeView(Maze maze , Main game ) {
         this.maze = maze;
         this.game = game;
         wall = new Wall();
         WinCells winCells = new WinCells();
+        stage = new Stage(new ScreenViewport());
         challengeCells = new ChallengeCells();
         wall.loadBlockedCells(maze.getMap());
         challengeCells.loadChallengeCells(maze.getMap());
         winCells.loadWinCells(maze.getMap());// Chargement des cellules bloquées depuis le modèle
-        player = new Player(19, 500, wall); // Passer "wall" au constructeur de Player
+        player = new Player(STARTX*cellSize, STARTY*cellSize, wall); // Passer "wall" au constructeur de Player
         gameController = new GameController(player, wall); // Création du GameController
     }
+
 
     @Override
     public void show() {
@@ -71,12 +78,14 @@ public class MazeView implements Screen {
         camera.setToOrtho(false, w, h);  // Définir la caméra pour l'affichage
         camera.update();
 
-        // Ajuster la taille de la police
-
-
         // Créer un nouveau PlayerInputProcessor et l'associer avec l'InputProcessor de GDX
         inputProcessor = new PlayerInputProcessor(gameController);  // Passer le contrôleur au lieu du joueur
-        Gdx.input.setInputProcessor(inputProcessor);// Associer l'inputProcessor pour les entrées clavier
+
+        // Use InputMultiplexer to handle input for both PlayerInputProcessor and Stage
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage); // Stage for UI
+        multiplexer.addProcessor(inputProcessor); // Player input
+        Gdx.input.setInputProcessor(multiplexer); // Set the multiplexer as the input processor
 
     }
 
@@ -93,7 +102,48 @@ public class MazeView implements Screen {
             game.setScreen(new MenuScreen((Main) Gdx.app.getApplicationListener()));
             return;
         }
-        // Mettre à jour la logique du joueur
+
+
+//        if (challengeCells.isChallengeCell(playerX, playerY)){
+//            String question = "What is 5 + 5?";
+//            String[] options = {"10", "15", "20"};
+//            String selectedOption = ChallengePopup.showPopup(frame, question, options);
+//
+//            if (selectedOption != null) {
+//                if (selectedOption.equals("10")) {
+//                    System.out.println("Correct Answer!");
+//                    TiledMapTileLayer tileLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("challenge");
+//                    tileLayer.setCell(playerX, playerY, null);
+//                }
+//                else {
+//                    System.out.println("Wrong Answer!");
+//                }
+//
+//            }
+//
+//
+//        }
+
+
+        if (challengeCells.isChallengeCell(playerX, playerY)) {
+            String question = "Quel est le résultat de 5 + 5 ?";
+            String[] options = {"10", "15", "20"};
+
+            String selectedOption = ChallengePopup.showPopup(frame, question, options);
+
+            if (selectedOption != null) {
+                if (selectedOption.equals("10")) {
+                    System.out.println("Bonne réponse !");
+                    player.moveByLastDirection(2); // Déplace le joueur de 2 cases dans la dernière direction
+
+                    // Supprime la tuile du challenge après la bonne réponse
+                    TiledMapTileLayer tileLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("challenge");
+                    tileLayer.setCell(playerX, playerY, null);
+                } else {
+                    System.out.println("Mauvaise réponse !");
+                }
+            }
+        }
         gameController.update(); // Mise à jour du contrôleur, gérant la logique du joueur et les collisions
 
         // Rendre la carte
@@ -105,6 +155,8 @@ public class MazeView implements Screen {
         batch.begin();
         player.draw(batch);  // Dessiner le joueur
         batch.end();
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override

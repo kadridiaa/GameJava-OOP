@@ -1,12 +1,9 @@
 package com.badlogic.maserunner.controller;
 
-import static java.nio.file.Files.move;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.maserunner.model.Direction;
 import com.badlogic.maserunner.model.Player;
 import com.badlogic.maserunner.model.Wall;
-import com.badlogic.maserunner.view.PlayerInputProcessor;
 
 public class GameController {
 
@@ -19,26 +16,44 @@ public class GameController {
         this.wall = wall;
     }
 
-    public void update() {
 
-    }
+
+    public void update() {}
 
     public void handleInput(int keycode) {
-        // Traitez l'entrée utilisateur ici pour éviter de le faire dans PlayerInputProcessor
-        switch (keycode) {
-            case Input.Keys.UP:
-                player.move(0, 14);  // Exemple de mouvement vers le haut
+        Direction direction = getDirectionFromKeycode(keycode);
+
+        switch (direction) {
+            case UP:
+                player.move(0, 16);
                 break;
-            case Input.Keys.DOWN:
-                player.move(0, -14);  // Exemple de mouvement vers le bas
+            case DOWN:
+                player.move(0, -16);
                 break;
-            case Input.Keys.LEFT:
-                player.move(-14, 0);  // Exemple de mouvement vers la gauche
+            case LEFT:
+                player.move(-16, 0);
                 break;
-            case Input.Keys.RIGHT:
-                player.move(14, 0);  // Exemple de mouvement vers la droite
+            case RIGHT:
+                player.move(16, 0);
+                break;
+            default:
+                // Ne rien faire si aucune direction n'est valide
                 break;
         }
     }
 
+    private Direction getDirectionFromKeycode(int keycode) {
+        switch (keycode) {
+            case Input.Keys.UP:
+                return Direction.UP;
+            case Input.Keys.DOWN:
+                return Direction.DOWN;
+            case Input.Keys.LEFT:
+                return Direction.LEFT;
+            case Input.Keys.RIGHT:
+                return Direction.RIGHT;
+            default:
+                return Direction.NONE;
+        }
+    }
 }
