@@ -9,7 +9,6 @@ public class GameController {
 
     private Player player;
     private Wall wall;
-    private float speed = 1.0f;
 
     public GameController(Player player, Wall wall) {
         this.player = player;

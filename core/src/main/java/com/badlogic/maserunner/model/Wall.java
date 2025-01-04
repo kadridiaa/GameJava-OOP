@@ -6,12 +6,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Wall {
     private List<Cell> blockedCells;
 
     public Wall() {
         blockedCells = new ArrayList<>();
     }
+
+
 
     public void loadBlockedCells(TiledMap tiledMap) {
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Calque de Tuiles 1");
@@ -27,11 +30,13 @@ public class Wall {
                     blockedCells.add(cell);
                     cptBlocked++;
                 }
-
             }
         }
         System.out.println("Blocked cells: " + cptBlocked);
     }
+
+
+
 
     public boolean isBlocked(int column, int row) {
         for (Cell cell : blockedCells) {
@@ -39,6 +44,8 @@ public class Wall {
                 return true;  // La cellule est bloquée
             }
         }
+
         return false;  // La cellule n'est pas bloquée
     }
+
 }

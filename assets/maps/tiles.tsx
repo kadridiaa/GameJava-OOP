@@ -6,9 +6,29 @@
    <property name="challenge" value=""/>
   </properties>
  </tile>
+ <tile id="33">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="53">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="60">
   <properties>
    <property name="win" value=""/>
+  </properties>
+ </tile>
+ <tile id="73">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="102">
+  <properties>
+   <property name="blocked" value=""/>
   </properties>
  </tile>
  <tile id="141">
@@ -57,6 +77,51 @@
   </properties>
  </tile>
  <tile id="290">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="372">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="373">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="374">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="392">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="393">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="394">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="412">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="413">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="414">
   <properties>
    <property name="blocked" value=""/>
   </properties>

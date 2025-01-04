@@ -10,6 +10,8 @@ public class Cell {
     private boolean blocked;
     private boolean win;
     private boolean challenge;
+    private boolean padlock;
+    private boolean blockedDoor;
 
     public Cell(int column, int row, TiledMapTileLayer.Cell tiledCell) {
         this.column = column;
@@ -18,6 +20,8 @@ public class Cell {
         this.blocked = checkBlockedProperty();
         this.win = checkWinProperty();
         this.challenge = checkChallengeProperty();
+        this.padlock = checkPadlockProperty();
+        this.blockedDoor = checkBlockDoorProperty();
     }
 
     public int getColumn() {
@@ -40,9 +44,15 @@ public class Cell {
         return challenge;
     }
 
-    public TiledMapTileLayer.Cell getTiledCell() {
-        return tiledCell;
+    public boolean isPadlockCell(){
+        return padlock;
     }
+
+    public boolean isBlockedDoor(){
+        return blockedDoor;
+    }
+
+
 
 
 
@@ -66,6 +76,20 @@ public class Cell {
     private boolean checkChallengeProperty() {
         if (tiledCell != null && tiledCell.getTile() != null) {
             return tiledCell.getTile().getProperties().containsKey("challenge");
+        }
+        return false;
+    }
+
+    private boolean checkPadlockProperty() {
+        if (tiledCell != null && tiledCell.getTile() != null) {
+            return tiledCell.getTile().getProperties().containsKey("padlock");
+        }
+        return false;
+    }
+
+    private boolean checkBlockDoorProperty() {
+        if (tiledCell != null && tiledCell.getTile() != null) {
+            return tiledCell.getTile().getProperties().containsKey("blocked");
         }
         return false;
     }

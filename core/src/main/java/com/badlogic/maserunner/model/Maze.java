@@ -2,7 +2,6 @@ package com.badlogic.maserunner.model;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Maze {
     private TiledMap map;

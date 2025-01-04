@@ -3,7 +3,6 @@ package com.badlogic.maserunner.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,20 +10,17 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.maserunner.Main;
 import com.badlogic.maserunner.controller.GameController;
+import com.badlogic.maserunner.controller.PadlockController;
 import com.badlogic.maserunner.model.ChallengeCells;
+import com.badlogic.maserunner.model.DoorCells;
 import com.badlogic.maserunner.model.Maze;
+import com.badlogic.maserunner.model.PadlockCells;
 import com.badlogic.maserunner.model.Player;
 import com.badlogic.maserunner.model.Wall;
 import com.badlogic.maserunner.model.WinCells;
 import com.badlogic.maserunner.model.ChallengePopup;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
@@ -42,11 +38,16 @@ public class MazeView implements Screen {
     private GameController gameController;
     private Main game;
     private ChallengeCells challengeCells;
-    private static final int STARTX = 1 ;
+    private PadlockCells padlockCells;
+    private static final int STARTX = 1  ;
     private static final int STARTY = 32 ;
     private static final int cellSize = 16 ;
     private JFrame frame;
     private Stage stage;
+    private PadlockController padlockController;
+    private DoorCells doorCells;
+
+
 
 
 
@@ -60,11 +61,20 @@ public class MazeView implements Screen {
         WinCells winCells = new WinCells();
         stage = new Stage(new ScreenViewport());
         challengeCells = new ChallengeCells();
+        this.padlockCells = new PadlockCells();
+        DoorCells doorCells = new DoorCells();
         wall.loadBlockedCells(maze.getMap());
+        doorCells.loadblockedDoorCells(maze.getMap());
         challengeCells.loadChallengeCells(maze.getMap());
-        winCells.loadWinCells(maze.getMap());// Chargement des cellules bloquées depuis le modèle
+        winCells.loadWinCells(maze.getMap());
+        padlockCells.loadPadlockCells(maze.getMap());
+        doorCells.loadblockedDoorCells(maze.getMap());
         player = new Player(STARTX*cellSize, STARTY*cellSize, wall); // Passer "wall" au constructeur de Player
         gameController = new GameController(player, wall); // Création du GameController
+        padlockController = new PadlockController();
+
+
+
     }
 
 
@@ -87,7 +97,13 @@ public class MazeView implements Screen {
         multiplexer.addProcessor(inputProcessor); // Player input
         Gdx.input.setInputProcessor(multiplexer); // Set the multiplexer as the input processor
 
+        TiledMapTileLayer padlockLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("padlock");
+        padlockController.hidePadlocks(padlockLayer);
+
     }
+
+
+
 
     @Override
     public void render(float delta) {
@@ -96,6 +112,7 @@ public class MazeView implements Screen {
         WinCells winCells = new WinCells();
         winCells.loadWinCells(maze.getMap());
 
+
         int playerX = (int) player.getPosition().x / 16; // Diviser par la taille des tuiles (par ex. 32)
         int playerY = (int) player.getPosition().y / 16;
         if (winCells.isWinTile(playerX, playerY)) {
@@ -103,26 +120,6 @@ public class MazeView implements Screen {
             return;
         }
 
-
-//        if (challengeCells.isChallengeCell(playerX, playerY)){
-//            String question = "What is 5 + 5?";
-//            String[] options = {"10", "15", "20"};
-//            String selectedOption = ChallengePopup.showPopup(frame, question, options);
-//
-//            if (selectedOption != null) {
-//                if (selectedOption.equals("10")) {
-//                    System.out.println("Correct Answer!");
-//                    TiledMapTileLayer tileLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("challenge");
-//                    tileLayer.setCell(playerX, playerY, null);
-//                }
-//                else {
-//                    System.out.println("Wrong Answer!");
-//                }
-//
-//            }
-//
-//
-//        }
 
 
         if (challengeCells.isChallengeCell(playerX, playerY)) {
@@ -135,7 +132,9 @@ public class MazeView implements Screen {
                 if (selectedOption.equals("10")) {
                     System.out.println("Bonne réponse !");
                     player.moveByLastDirection(2); // Déplace le joueur de 2 cases dans la dernière direction
-
+                    TiledMapTileLayer padlockLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("padlock");
+                    padlockController.showPadlocks(padlockLayer);
+                    System.out.println("le nombre de cellules affichee est : "+padlockCells.nbrCells());
                     // Supprime la tuile du challenge après la bonne réponse
                     TiledMapTileLayer tileLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("challenge");
                     tileLayer.setCell(playerX, playerY, null);
@@ -143,6 +142,26 @@ public class MazeView implements Screen {
                     System.out.println("Mauvaise réponse !");
                 }
             }
+        }
+
+        if (padlockCells.isPadlockCell(playerX, playerY)) {
+            System.out.println("Le joueur a atteint un cadenas !");
+
+            TiledMapTileLayer lockedLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("door");
+            System.out.println("lock cells is here : "+lockedLayer);
+            if (lockedLayer != null) {
+                for (int x = 0; x < lockedLayer.getWidth(); x++) {
+                    for (int y = 0; y < lockedLayer.getHeight(); y++) {
+                        if (lockedLayer.getCell(x, y) != null) {
+                            lockedLayer.setCell(x, y, null);
+                            System.out.println("les lock cells sont supprimees");
+                        }
+                    }
+                }
+                System.out.println("Les cadenas devant la porte ont été supprimés !");
+            }
+            //padlockController.onPadlockReached(player, doorCells , maze.getMap());
+
         }
         gameController.update(); // Mise à jour du contrôleur, gérant la logique du joueur et les collisions
 

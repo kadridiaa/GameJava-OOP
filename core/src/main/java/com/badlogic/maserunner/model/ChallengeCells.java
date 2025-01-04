@@ -1,6 +1,5 @@
 package com.badlogic.maserunner.model;
 
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
@@ -25,6 +24,7 @@ public class ChallengeCells {
 
                 // Vérifie si la cellule est bloquée
                 if (cell.isChallengeCell()){
+
                     challengeCells.add(cell);
                 }
             }
