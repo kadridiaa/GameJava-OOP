@@ -62,14 +62,14 @@ public class MazeView implements Screen {
         stage = new Stage(new ScreenViewport());
         challengeCells = new ChallengeCells();
         this.padlockCells = new PadlockCells();
-        DoorCells doorCells = new DoorCells();
+        doorCells = new DoorCells();
         wall.loadBlockedCells(maze.getMap());
         doorCells.loadblockedDoorCells(maze.getMap());
         challengeCells.loadChallengeCells(maze.getMap());
         winCells.loadWinCells(maze.getMap());
         padlockCells.loadPadlockCells(maze.getMap());
         doorCells.loadblockedDoorCells(maze.getMap());
-        player = new Player(STARTX*cellSize, STARTY*cellSize, wall); // Passer "wall" au constructeur de Player
+        player = new Player(STARTX*cellSize, STARTY*cellSize, wall , doorCells); // Passer "wall" au constructeur de Player
         gameController = new GameController(player, wall); // Création du GameController
         padlockController = new PadlockController();
 
@@ -137,6 +137,7 @@ public class MazeView implements Screen {
                     System.out.println("le nombre de cellules affichee est : "+padlockCells.nbrCells());
                     // Supprime la tuile du challenge après la bonne réponse
                     TiledMapTileLayer tileLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("challenge");
+                    challengeCells.getChallengeCells().clear();
                     tileLayer.setCell(playerX, playerY, null);
                 } else {
                     System.out.println("Mauvaise réponse !");
@@ -149,20 +150,10 @@ public class MazeView implements Screen {
 
             TiledMapTileLayer lockedLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("door");
             System.out.println("lock cells is here : "+lockedLayer);
-            if (lockedLayer != null) {
-                for (int x = 0; x < lockedLayer.getWidth(); x++) {
-                    for (int y = 0; y < lockedLayer.getHeight(); y++) {
-                        if (lockedLayer.getCell(x, y) != null) {
-                            lockedLayer.setCell(x, y, null);
-                            System.out.println("les lock cells sont supprimees");
-                        }
-                    }
-                }
-                System.out.println("Les cadenas devant la porte ont été supprimés !");
-            }
-            //padlockController.onPadlockReached(player, doorCells , maze.getMap());
+            padlockController.onPadlockReached(player, doorCells , maze.getMap());
 
         }
+
         gameController.update(); // Mise à jour du contrôleur, gérant la logique du joueur et les collisions
 
         // Rendre la carte

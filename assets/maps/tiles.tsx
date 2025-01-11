@@ -8,12 +8,12 @@
  </tile>
  <tile id="33">
   <properties>
-   <property name="blocked" value=""/>
+   <property name="blocked" value="true"/>
   </properties>
  </tile>
  <tile id="53">
   <properties>
-   <property name="blocked" value=""/>
+   <property name="blocked" value="true"/>
   </properties>
  </tile>
  <tile id="60">
@@ -23,7 +23,7 @@
  </tile>
  <tile id="73">
   <properties>
-   <property name="blocked" value=""/>
+   <property name="blocked" value="true"/>
   </properties>
  </tile>
  <tile id="102">

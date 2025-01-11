@@ -2,17 +2,19 @@ package com.badlogic.maserunner.model;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.maserunner.controller.PadlockController;
+import java.util.AbstractMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DoorCells {
     private List<Cell> blockedDoorCells;
-    private TiledMap map;
+    List<AbstractMap.SimpleEntry<Integer, Integer>> cellsPosition;
+
 
     public DoorCells() {
         blockedDoorCells = new ArrayList<>();
+        cellsPosition  = new ArrayList<>();
     }
 
 
@@ -24,6 +26,7 @@ public class DoorCells {
                 TiledMapTileLayer.Cell tiledCell = tileLayer.getCell(column, row);
                 // Crée une instance de Cell pour chaque cellule
                 Cell cell = new Cell(column, row, tiledCell);
+                cellsPosition.add(new AbstractMap.SimpleEntry<>(column, row));
                 if (cell.isBlockedDoor()) {
                     blockedDoorCells.add(cell);
                     cptBlocked++;
@@ -31,9 +34,6 @@ public class DoorCells {
             }
         }
         System.out.println("Blocked door cells: " + cptBlocked);
-        for (int i=0 ; i<blockedDoorCells.size() ; i++){
-        System.out.println("la cell 1 de blockedCells x : "+blockedDoorCells.get(i).getRow()+" position y: " +blockedDoorCells.get(i).getColumn());
-        }
 
     }
 
@@ -46,11 +46,11 @@ public class DoorCells {
         return false;
     }
 
-
-
-    public void clearBlockedCells() {
-        blockedDoorCells.clear(); // Supprime toutes les cellules bloquées
-        System.out.println("Toutes les cellules bloquées ont été supprimées.");
+    public List<Cell> getBlockedDoorCells() {
+        return blockedDoorCells;
     }
 
+    public List<AbstractMap.SimpleEntry<Integer, Integer>> getCellsPosition() {
+        return cellsPosition;
+    }
 }

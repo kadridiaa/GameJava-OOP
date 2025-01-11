@@ -13,7 +13,7 @@ public class Maze {
         this.map = new TmxMapLoader().load(mapFilePath);
         this.wall = new Wall();
         wall.loadBlockedCells(map);  // Charger les cellules bloquées dans le wall
-        this.player = new Player(100, 100, wall);  // Passer Wall au joueur
+        this.player = new Player(100, 100, wall , new DoorCells());  // Passer Wall au joueur
     }
 
     // Méthode pour obtenir la carte

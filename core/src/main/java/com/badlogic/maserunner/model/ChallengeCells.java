@@ -24,7 +24,6 @@ public class ChallengeCells {
 
                 // Vérifie si la cellule est bloquée
                 if (cell.isChallengeCell()){
-
                     challengeCells.add(cell);
                 }
             }
@@ -39,5 +38,9 @@ public class ChallengeCells {
             }
         }
         return false;  // Pas de défi sur cette cellule
+    }
+
+    public List<Cell> getChallengeCells() {
+        return challengeCells;
     }
 }

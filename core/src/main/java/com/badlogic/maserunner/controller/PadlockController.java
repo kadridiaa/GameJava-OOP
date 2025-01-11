@@ -6,11 +6,13 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.maserunner.model.DoorCells;
 import com.badlogic.maserunner.model.Player;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PadlockController {
     private Map<String, Cell> savedCells = new HashMap<>();
+
 
     public void hidePadlocks(TiledMapTileLayer padlockLayer) {
         if (padlockLayer != null) {
@@ -45,7 +47,7 @@ public class PadlockController {
     public void onPadlockReached(Player player, DoorCells doorCells, TiledMap tiledMap) {
         TiledMapTileLayer padlockLayer = (TiledMapTileLayer) tiledMap.getLayers().get("padlock");
 
-        int playerX = (int) player.getPosition().x / 16; // Conversion des coordonnées
+        int playerX = (int) player.getPosition().x / 16;
         int playerY = (int) player.getPosition().y / 16;
 
         if (padlockLayer != null) {
@@ -53,11 +55,17 @@ public class PadlockController {
             if (padlockCell != null) {
                 // Débloquer les portes
                 padlockLayer.setCell(playerX, playerY, null);
-                //doorCells.clearBlockedCells();
                 System.out.println("Le joueur a atteint un cadenas. Les portes sont débloquées.");
+                doorCells.getBlockedDoorCells().clear();
+                TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("door");
+
+                for (AbstractMap.SimpleEntry<Integer, Integer> ele : doorCells.getCellsPosition()) {
+                    tileLayer.setCell(ele.getKey(), ele.getValue(), null);
+                }
             }
         }
     }
+
 
 
 

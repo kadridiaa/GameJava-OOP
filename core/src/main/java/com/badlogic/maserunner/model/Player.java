@@ -13,11 +13,11 @@ public class Player {
     private Direction lastDirection = Direction.NONE;
     private DoorCells doorCells = new DoorCells();
 
-    public Player(float startX, float startY, Wall wall) {
+    public Player(float startX, float startY, Wall wall , DoorCells doorCells) {
         this.position = new Vector2(startX, startY);
         this.texture = new Texture("Entite/player.png"); // Assurez-vous que l'image est dans le dossier assets
         this.wall = wall;
-
+        this.doorCells = doorCells;
     }
 
 
@@ -44,7 +44,7 @@ public class Player {
         // Vérifier si la nouvelle position est bloquée avant de déplacer
         if (wall.isBlocked((int) newX / 16, (int) newY / 16) ) {
             System.out.println("J'ai rencontré un mur !");
-            System.out.println("la var isBlocked pour wall est : " + wall.isBlocked((int) newX / 16, (int) newY / 16));
+            System.out.println("door cells dans : " +doorCells);
         } else if (doorCells.isBlockedDoor((int) newX / 16, (int) newY / 16)) {
             System.out.println("la var isBlocked pour door est : "+doorCells.isBlockedDoor((int) newX / 16, (int) newY / 16));
         } else {
