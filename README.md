@@ -13,7 +13,7 @@ Maze Runner est un jeu 2D où le joueur doit naviguer dans un labyrinthe pour at
 
 1. Clonez ce dépôt sur votre machine locale en utilisant la commande suivante :
     ```bash
-    git clone <URL-du-dépôt-GitHub>
+    git clone https://github.com/kadridiaa/GameJava-OOP.git
     ```
 2. Ouvrez Android Studio et sélectionnez **Open an existing project**.
 3. Sélectionnez le dossier cloné pour ouvrir le projet dans Android Studio.
