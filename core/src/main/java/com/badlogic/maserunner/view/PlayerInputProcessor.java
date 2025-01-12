@@ -1,6 +1,5 @@
 package com.badlogic.maserunner.view;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.maserunner.controller.GameController;
 
@@ -21,17 +20,17 @@ public class PlayerInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;  // Nous n'avons pas besoin de gérer la relâche de touche ici
+        return false;
     }
 
     @Override
     public boolean keyTyped(char character) {
-        return false;  // Nous n'avons pas besoin de gérer les caractères typés
+        return false;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;  // Nous n'avons pas besoin de gérer les clics de souris
+        return false;
     }
 
     @Override

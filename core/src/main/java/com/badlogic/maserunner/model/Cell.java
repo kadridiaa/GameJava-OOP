@@ -1,22 +1,24 @@
 package com.badlogic.maserunner.model;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.maserunner.controller.CellManager;
 
 public class Cell {
-    private int column;
-    private int row;
-    private TiledMapTileLayer.Cell tiledCell;
-    private boolean blocked;
-    private boolean win;
-    private boolean challenge;
-    private boolean padlock;
+    private int column;  // Colonne de la cellule
+    private int row;     // Rangée de la cellule
+    private TiledMapTileLayer.Cell tiledCell;  // Cellule du TiledMap
+    private boolean blocked;  // Si la cellule est bloquée
+    private boolean win;  // Si la cellule est une cellule de victoire
+    private boolean challenge;  // Si la cellule est un défi
+    private boolean padlock;  // Si la cellule a un cadenas
     private boolean blockedDoor;
+    private CellManager cellManager;
 
     public Cell(int column, int row, TiledMapTileLayer.Cell tiledCell) {
         this.column = column;
         this.row = row;
         this.tiledCell = tiledCell;
+        this.cellManager = new CellManager("maps/simple.tmx" , 0);
         this.blocked = checkBlockedProperty();
         this.win = checkWinProperty();
         this.challenge = checkChallengeProperty();
@@ -36,63 +38,48 @@ public class Cell {
         return blocked;
     }
 
-    public boolean isWin(){
+    public boolean isWin() {
         return win;
     }
 
-    public boolean isChallengeCell(){
+    public boolean isChallengeCell() {
         return challenge;
     }
 
-    public boolean isPadlockCell(){
+    public boolean isPadlockCell() {
         return padlock;
     }
 
-    public boolean isBlockedDoor(){
+    public boolean isBlockedDoor() {
         return blockedDoor;
     }
 
-
-
-
-
-
-
-    // Vérifier si la cellule a la propriété "blocked"
+    // Vérifie si la cellule a la propriété "blocked"
     private boolean checkBlockedProperty() {
-        if (tiledCell != null && tiledCell.getTile() != null) {
-            return tiledCell.getTile().getProperties().containsKey("blocked");
-        }
-        return false;
+        return tiledCell != null && tiledCell.getTile() != null && tiledCell.getTile().getProperties().containsKey("blocked");
     }
 
+    // Vérifie si la cellule a la propriété "win"
     private boolean checkWinProperty() {
-        if (tiledCell != null && tiledCell.getTile() != null) {
-            return tiledCell.getTile().getProperties().containsKey("win");
-        }
-        return false;
+        return tiledCell != null && tiledCell.getTile() != null && tiledCell.getTile().getProperties().containsKey("win");
     }
 
+    // Vérifie si la cellule a la propriété "challenge"
     private boolean checkChallengeProperty() {
-        if (tiledCell != null && tiledCell.getTile() != null) {
-            return tiledCell.getTile().getProperties().containsKey("challenge");
-        }
-        return false;
+        return tiledCell != null && tiledCell.getTile() != null && tiledCell.getTile().getProperties().containsKey("challenge");
     }
 
+    // Vérifie si la cellule a la propriété "padlock"
     private boolean checkPadlockProperty() {
-        if (tiledCell != null && tiledCell.getTile() != null) {
-            return tiledCell.getTile().getProperties().containsKey("padlock");
-        }
-        return false;
+        return tiledCell != null && tiledCell.getTile() != null && tiledCell.getTile().getProperties().containsKey("padlock");
     }
 
+    // Vérifie si la cellule a la propriété "blockedDoor"
     private boolean checkBlockDoorProperty() {
-        if (tiledCell != null && tiledCell.getTile() != null) {
-            return tiledCell.getTile().getProperties().containsKey("blocked");
-        }
-        return false;
+        return tiledCell != null && tiledCell.getTile() != null && tiledCell.getTile().getProperties().containsKey("blocked");
     }
 
-
+    public TiledMapTileLayer getAllCell(){
+        return cellManager.loadCellsLayer();
+    }
 }

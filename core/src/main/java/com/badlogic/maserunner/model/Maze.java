@@ -21,10 +21,6 @@ public class Maze {
         return map;
     }
 
-    // Méthode pour obtenir le joueur
-    public Player getPlayer() {
-        return player;
-    }
 
     // Méthode pour libérer les ressources liées à la carte
     public void dispose() {

@@ -34,12 +34,11 @@ public class PadlockController {
                 String[] coords = entry.getKey().split(",");
                 int x = Integer.parseInt(coords[0]);
                 int y = Integer.parseInt(coords[1]);
-
                 // Restaure la cellule sauvegardée
                 padlockLayer.setCell(x, y, entry.getValue());
             }
 
-            // Nettoyer les cellules sauvegardées (optionnel)
+            // Nettoyer les cellules sauvegardées
             savedCells.clear();
         }
     }

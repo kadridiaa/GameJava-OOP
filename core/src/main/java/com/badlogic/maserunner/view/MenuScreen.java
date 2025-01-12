@@ -15,26 +15,29 @@ public class MenuScreen implements Screen {
     private Main game; // Référence au jeu principal
     private SpriteBatch batch;
     private BitmapFont font;
-    private Texture buttonTexture;
-    private float buttonX, buttonY, buttonWidth, buttonHeight;
+    private Texture playButtonTexture, exitButtonTexture;
+    private float playButtonX, playButtonY, buttonWidth, buttonHeight, exitButtonY;
+    private Texture backgroundTexture;
 
     public MenuScreen(Main game) {
         this.game = game;
         this.batch = new SpriteBatch();
         this.font = new BitmapFont(); // Police par défaut
         this.font.setColor(Color.WHITE);
-        this.buttonTexture = new Texture("Menu/exit_button_active.png");
+        this.backgroundTexture = new Texture("Menu/background.png");
+        this.playButtonTexture = new Texture("Menu/play_button_active.png"); // Bouton "Play"
+        this.exitButtonTexture = new Texture("Menu/exit_button_active.png"); // Bouton "Exit"
 
-        // Position et taille du bouton
+        // Position et taille des boutons
         this.buttonWidth = 200;
         this.buttonHeight = 80;
-        this.buttonX = (Gdx.graphics.getWidth() - buttonWidth) / 2f;
-        this.buttonY = Gdx.graphics.getHeight() / 2f - 50;
+        this.playButtonX = (Gdx.graphics.getWidth() - buttonWidth) / 2f;
+        this.playButtonY = Gdx.graphics.getHeight() / 2f + 50; // Position du bouton Play
+        this.exitButtonY = playButtonY - buttonHeight - 20; // Position du bouton Exit sous le bouton Play
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -44,32 +47,41 @@ public class MenuScreen implements Screen {
 
         batch.begin();
 
-        // Affiche le texte de victoire
-        font.draw(batch, "Tu as gagné !", Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() / 2f + 100);
+        // Dessine l'image de fond sur toute la surface de l'écran
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        // Affiche le bouton
-        batch.draw(buttonTexture, buttonX, buttonY, buttonWidth, buttonHeight);
-        //font.draw(batch, "Rejouer", buttonX + 50, buttonY + 50);
+        // Affiche le bouton "Play"
+        batch.draw(playButtonTexture, playButtonX, playButtonY, buttonWidth, buttonHeight);
+
+        // Affiche le bouton "Exit" sous le bouton Play
+        batch.draw(exitButtonTexture, playButtonX, exitButtonY, buttonWidth, buttonHeight);
 
         batch.end();
 
-        // Vérifie si le bouton est cliqué
+        // Vérifie si le bouton "Play" est cliqué
         if (Gdx.input.isTouched()) {
             float touchX = Gdx.input.getX();
             float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-            if (touchX > buttonX && touchX < buttonX + buttonWidth &&
-                touchY > buttonY && touchY < buttonY + buttonHeight) {
-                // Charger un nouveau labyrinthe et retourner à MazeView
+            // Vérifie si le bouton Play est cliqué
+            if (touchX > playButtonX && touchX < playButtonX + buttonWidth &&
+                touchY > playButtonY && touchY < playButtonY + buttonHeight) {
+                // Charger le jeu principal
                 Maze maze = new Maze("maps/simple.tmx");
-                game.setScreen(new MazeView(maze , game));
+                game.setScreen(new MazeView(maze, game));
+            }
+
+            // Vérifie si le bouton Exit est cliqué
+            if (touchX > playButtonX && touchX < playButtonX + buttonWidth &&
+                touchY > exitButtonY && touchY < exitButtonY + buttonHeight) {
+                // Quitter le jeu
+                Gdx.app.exit();
             }
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        // Gérer le redimensionnement si nécessaire
     }
 
     @Override
@@ -85,6 +97,8 @@ public class MenuScreen implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        buttonTexture.dispose();
+        playButtonTexture.dispose();
+        exitButtonTexture.dispose();
+        backgroundTexture.dispose(); // Libérer la texture de fond
     }
 }

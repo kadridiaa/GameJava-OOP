@@ -10,29 +10,30 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.maserunner.Main;
 import com.badlogic.maserunner.model.Maze;
 
-
 public class MainMenuScreen implements Screen {
 
     private Main game; // Référence au jeu principal
     private SpriteBatch batch;
     private BitmapFont font;
     private Texture playButtonTexture;
-    private float buttonX, buttonY, buttonWidth, buttonHeight;
-
-
+    private float posX, posY, buttonWidth, buttonHeight;
+    private Texture backgroundTexture;
+    private Texture titleTexture;
 
     public MainMenuScreen(Main game) {
         this.game = game;
         this.batch = new SpriteBatch();
         this.font = new BitmapFont(); // Police par défaut
         this.font.setColor(Color.WHITE);
+        this.backgroundTexture = new Texture("Menu/background.png");
+        this.titleTexture = new Texture("Menu/game_title.png");// Charger l'image de fond
         this.playButtonTexture = new Texture("Menu/play_button_active.png"); // Bouton "Play"
 
         // Position et taille du bouton
         this.buttonWidth = 200;
         this.buttonHeight = 80;
-        this.buttonX = (Gdx.graphics.getWidth() - buttonWidth) / 2f;
-        this.buttonY = Gdx.graphics.getHeight() / 2f - 50;
+        this.posX = (Gdx.graphics.getWidth() - buttonWidth) / 2f;
+        this.posY = Gdx.graphics.getHeight() / 2f - 50;
     }
 
     @Override
@@ -47,12 +48,14 @@ public class MainMenuScreen implements Screen {
 
         batch.begin();
 
+        // Dessine l'image de fond sur toute la surface de l'écran
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         // Affiche le titre du jeu
-        font.draw(batch, "Maze Runner", Gdx.graphics.getWidth() / 2f - 80, Gdx.graphics.getHeight() / 2f + 100);
+        batch.draw(titleTexture, posX+20, posY+150, 150, 60);
 
         // Affiche le bouton "Play"
-        batch.draw(playButtonTexture, buttonX, buttonY, buttonWidth, buttonHeight);
-        //font.draw(batch, "Jouer", buttonX + 50, buttonY + 50);
+        batch.draw(playButtonTexture, posX, posY, buttonWidth, buttonHeight);
 
         batch.end();
 
@@ -61,8 +64,8 @@ public class MainMenuScreen implements Screen {
             float touchX = Gdx.input.getX();
             float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-            if (touchX > buttonX && touchX < buttonX + buttonWidth &&
-                touchY > buttonY && touchY < buttonY + buttonHeight) {
+            if (touchX > posX && touchX < posX + buttonWidth &&
+                touchY > posY && touchY < posY + buttonHeight) {
                 // Charger le jeu principal
                 Maze maze = new Maze("maps/simple.tmx");
                 game.setScreen(new MazeView(maze, game));
@@ -89,5 +92,6 @@ public class MainMenuScreen implements Screen {
         batch.dispose();
         font.dispose();
         playButtonTexture.dispose();
+        backgroundTexture.dispose(); // Libérer la texture de fond
     }
 }

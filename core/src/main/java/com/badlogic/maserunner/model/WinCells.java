@@ -20,11 +20,7 @@ public class WinCells {
                for (int row = 0; row < tileLayer.getHeight(); row++) {
             for (int column = 0; column < tileLayer.getWidth(); column++) {
                 TiledMapTileLayer.Cell tiledCell = tileLayer.getCell(column, row);
-
-                // Vérifie si la cellule contient la clé "win"
                 Cell cell = new Cell(column, row, tiledCell);
-
-                // Vérifie si la cellule est bloquée
                 if (cell.isWin()){
                     winCells.add(cell);
                 }

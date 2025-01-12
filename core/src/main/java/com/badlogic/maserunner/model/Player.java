@@ -51,7 +51,6 @@ public class Player {
 
             position.x = (int) newX;
             position.y = (int) newY;
-           // System.out.println("current position x : " + (int) newX  / 16+ "position Y : " + (int) newY / 16  );
 
         }
     }

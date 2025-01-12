@@ -69,7 +69,7 @@ public class MazeView implements Screen {
         winCells.loadWinCells(maze.getMap());
         padlockCells.loadPadlockCells(maze.getMap());
         doorCells.loadblockedDoorCells(maze.getMap());
-        player = new Player(STARTX*cellSize, STARTY*cellSize, wall , doorCells); // Passer "wall" au constructeur de Player
+        player = new Player(STARTX*cellSize, STARTY*cellSize, wall , doorCells);
         gameController = new GameController(player, wall); // Création du GameController
         padlockController = new PadlockController();
 
@@ -91,12 +91,10 @@ public class MazeView implements Screen {
         // Créer un nouveau PlayerInputProcessor et l'associer avec l'InputProcessor de GDX
         inputProcessor = new PlayerInputProcessor(gameController);  // Passer le contrôleur au lieu du joueur
 
-        // Use InputMultiplexer to handle input for both PlayerInputProcessor and Stage
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage); // Stage for UI
+        multiplexer.addProcessor(stage);
         multiplexer.addProcessor(inputProcessor); // Player input
-        Gdx.input.setInputProcessor(multiplexer); // Set the multiplexer as the input processor
-
+        Gdx.input.setInputProcessor(multiplexer);
         TiledMapTileLayer padlockLayer = (TiledMapTileLayer) maze.getMap().getLayers().get("padlock");
         padlockController.hidePadlocks(padlockLayer);
 
@@ -113,7 +111,7 @@ public class MazeView implements Screen {
         winCells.loadWinCells(maze.getMap());
 
 
-        int playerX = (int) player.getPosition().x / 16; // Diviser par la taille des tuiles (par ex. 32)
+        int playerX = (int) player.getPosition().x / 16;
         int playerY = (int) player.getPosition().y / 16;
         if (winCells.isWinTile(playerX, playerY)) {
             game.setScreen(new MenuScreen((Main) Gdx.app.getApplicationListener()));
@@ -177,12 +175,10 @@ public class MazeView implements Screen {
 
     @Override
     public void pause() {
-        // Pas nécessaire dans cet exemple
     }
 
     @Override
     public void hide() {
-        // Pas nécessaire dans cet exemple
     }
 
     @Override
@@ -195,7 +191,6 @@ public class MazeView implements Screen {
 
     @Override
     public void resume() {
-        // Pas nécessaire dans cet exemple
     }
 
 

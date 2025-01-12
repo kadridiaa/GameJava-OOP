@@ -18,26 +18,23 @@ public class ChallengeCells {
         for (int row = 0; row < tileLayer.getHeight(); row++) {
             for (int column = 0; column < tileLayer.getWidth(); column++) {
                 TiledMapTileLayer.Cell tiledCell = tileLayer.getCell(column, row);
-
-                // Vérifie si la cellule contient la clé "win"
                 Cell cell = new Cell(column, row, tiledCell);
 
-                // Vérifie si la cellule est bloquée
-                if (cell.isChallengeCell()){
+                if (cell.isChallengeCell()) {
                     challengeCells.add(cell);
                 }
             }
         }
-        System.out.println("Nombre de cellules de chellange: " + challengeCells.size());
+        System.out.println("Nombre de cellules de défi: " + challengeCells.size());
     }
 
     public boolean isChallengeCell(int column, int row) {
         for (Cell cell : challengeCells) {
             if (cell.getColumn() == column && cell.getRow() == row) {
-                return true;  // La cellule contient un défi
+                return true;
             }
         }
-        return false;  // Pas de défi sur cette cellule
+        return false;
     }
 
     public List<Cell> getChallengeCells() {

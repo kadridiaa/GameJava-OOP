@@ -3,24 +3,19 @@ package com.badlogic.maserunner;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.maserunner.controller.CellManager;
-import com.badlogic.maserunner.model.Cell;
 import com.badlogic.maserunner.model.Maze;
 import com.badlogic.maserunner.model.Wall;
 import com.badlogic.maserunner.model.WinCells;
 import com.badlogic.maserunner.view.MainMenuScreen;
 import com.badlogic.maserunner.view.MazeView;
-import com.badlogic.maserunner.view.MenuScreen;
 
-import java.util.List;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
 
     @Override
     public void create() {
         // Créer une instance du modèle Maze
-        Maze maze = new Maze("maps/simple.tmx");  // Charger le fichier TMX du labyrinthe
+            Maze maze = new Maze("maps/simple.tmx");  // Charger le fichier TMX du labyrinthe
         // Créer une instance de la vue MazeView en lui passant l'instance de Maze
         MazeView mazeView = new MazeView(maze , this);
         // Définir MazeView comme l'écran actuel du jeu
