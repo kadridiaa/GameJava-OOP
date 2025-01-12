@@ -20,7 +20,7 @@ Maze Runner est un jeu 2D où le joueur doit naviguer dans un labyrinthe pour at
 
 ## Compilation et Exécution
 
-1. Après avoir ouvert le projet dans Android Studio, configurez le projet pour correspondre à votre environnement (par exemple, version de SDK, etc.).
+1. Après avoir ouvert le projet dans Android Studio, configurez le projet en modifiant la configuration comme expliqué dans le rapport.
 2. Une fois la configuration terminée, cliquez sur **Run** pour compiler et exécuter le jeu sur un appareil ou un émulateur Android.
 
 ## Fonctionnalités
